@@ -38,7 +38,7 @@ var connection = mysql.createConnection({
 
   }
 
-  function ViewDepartment(){
+  function viewDepartment(){
 
   }
   
@@ -53,3 +53,11 @@ var connection = mysql.createConnection({
   function updateRole (){
 
   }
+
+
+
+  // Use Inquirer to make a prompt//
+  // What Do you want to do// 
+  // View Department, Employee, Roles// 
+  // Add Department, Employee, Roles// 
+  // Update Employee (delete employee, or update roles)// 
