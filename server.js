@@ -131,6 +131,40 @@ function viewRole() {
 
 function addRole() {
 
+  //prompts for new employee info
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "What is the title of this role?"
+
+      },
+      {
+        type: "number",
+        name: "salary",
+        message: "What is the salary of this role?"
+      },
+      {
+        type: "number",
+        name: "department_id",
+        message: "What is the Department ID??"
+      }
+    ])
+    .then(function (res) {
+      connection.query("INSERT INTO role (title,salary,department_id)",
+        {
+          title: res.title,
+          salary: res.salary,
+          department_id: res.department_id,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Department has been succesfully added.");
+          start();
+        }
+      );
+    });
 }
 
 function updateRole() {
@@ -182,5 +216,8 @@ function removeDept() {
   // Use Inquirer to make a prompt//
   // What Do you want to do// 
   // View Department, Employee, Roles// 
-  // Add Department, Employee, Roles// 
+  // Add Department, Employee, Roles// Done 
   // Update Employee (delete employee, or update roles)/
+  // Make sure schema.sql is working properly// 
+  // Make sure seed.sql works properly// 
+  
