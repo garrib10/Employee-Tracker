@@ -34,7 +34,7 @@ function start() {
         case "View all employees":
           return viewEmployee();
         case " View Employees by Department":
-          return viewbyDepartment();
+          return viewbyDept();
         case "Add Employee Information":
           return addEmployee();
         case "Update Employee Information":
@@ -61,7 +61,7 @@ function start() {
           connection.end();
       }
     });
-  
+
 }
 
 
@@ -72,7 +72,7 @@ function viewEmployee() {
 
 }
 
-function viewbyDepartment() {
+function viewbyDept() {
 
 }
 
@@ -102,7 +102,7 @@ function addEmployee() {
     ])
     .then(function (res) {
       connection.query(
-        "INSERT into employee SET?",
+        "INSERT INTO employee SET?",
         {
           first_name: res.first_name,
           last_name: res.last_name
@@ -125,19 +125,57 @@ function deleteEmployee() {
 
 }
 
-
-
-function addDepts() {
+function viewRole() {
 
 }
 
-function removeDepts() {
+function addRole() {
 
 }
 
 function updateRole() {
 
 }
+
+function removeRole() {
+
+}
+function viewDepts() {
+
+}
+
+function addDept() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "department",
+        message: "What kind of department would you like to add?"
+      }
+    ])
+    .then(function (res) {
+      connection.query("INSERT INTO department (name)",
+        {
+          department: res.department,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Department has been succesfully added.");
+          start();
+        }
+      );
+    });
+}
+
+function updateDept() {
+
+}
+
+function removeDept() {
+
+}
+
+
 
 
   // TO DO LIST// 
