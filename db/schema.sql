@@ -8,7 +8,7 @@ USE employee_db;
 --Create DEPARTMENT TABLE-- 
 CREATE TABLE department ( 
   id INT NOT NULL AUTO_INCREMENT,
-  department_id  VARCHAR(30) NOT NULL, 
+  department_name  VARCHAR(30) NOT NULL, 
   PRIMARY KEY (id)
  );
 
@@ -18,6 +18,7 @@ CREATE TABLE role (
  title VARCHAR(30) NOT NULL, 
  salary DECIMAL(10,2) NOT NULL,
  department_id INT,
+ FOREIGN KEY (department_id) REFERENCES department(id)
  PRIMARY KEY (id)
 );
 --CREATE EMPLOYEE TABLE-- 
@@ -26,6 +27,7 @@ CREATE TABLE employee (
  first_name VARCHAR(30) NOT NULL, 
  last_name  VARCHAR (30)NOT NULL, 
  role_id INT, 
+ FOREIGN KEY (role_id) REFERENCES role(id)
  manager_id INT, 
  Primary KEY (id)
 );

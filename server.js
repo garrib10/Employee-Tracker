@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cTable = require("console.table");
+var util = require("util");
+var { printTable } = require("console-table-printer")
+require("dotenv").config()
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -8,7 +11,7 @@ var connection = mysql.createConnection({
   // Your username// 
   user: "root",
   // Add password at end// 
-  password: "",
+  password: process.env.MYSQLPASS,
   database: "employee_db"
 });
 
@@ -17,6 +20,7 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId + "\n");
   start();
 });
+connection.query = util.promisify(connection.query)
 
 function start() {
   inquirer
@@ -69,14 +73,23 @@ function start() {
 
 
 function viewEmployee() {
-
+  connection.query("SELECT * FROM employee").then(res => {
+    printTable(res);
+    start();
+  })
 }
 
 function viewbyDept() {
 
 }
 
-function addEmployee() {
+async function addEmployee() {
+  const roles = await viewRole();
+
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id
+  }))
   inquirer
     .prompt([
       {
@@ -90,9 +103,11 @@ function addEmployee() {
         message: "What is the employee's last name?"
       },
       {
-        type: "input",
+        type: "list",
         name: "role_id",
-        message: "What is the employee's role ID?"
+        message: "What is the employee's role?",
+        choices: roleChoices
+
       },
       {
         type: "number",
@@ -126,11 +141,20 @@ function deleteEmployee() {
 }
 
 function viewRole() {
-
+  connection.query("SELECT * FROM role").then(res => {
+    printTable(res);
+    start();
+  })
 }
 
-function addRole() {
+async function addRole() {
 
+  const departments = await viewDept();
+
+  const deptChoices = departments.map(({ id, department_name}) => ({
+    name: department_name,
+    value: id
+  }))
   //prompts for new employee info
   inquirer
     .prompt([
@@ -146,9 +170,9 @@ function addRole() {
         message: "What is the salary of this role?"
       },
       {
-        type: "number",
+        type: "list",
         name: "department_id",
-        message: "What is the Department ID??"
+        message: "What is the Department??"
       }
     ])
     .then(function (res) {
@@ -175,7 +199,12 @@ function removeRole() {
 
 }
 function viewDepts() {
+ connection.query("SELECT * FROM department").then(res => {
+   printTable(res);
+   start();
+ })
 
+  
 }
 
 function addDept() {
@@ -212,7 +241,7 @@ function removeDept() {
 
 
 
-  // TO DO LIST// 
+ 
   // Use Inquirer to make a prompt//
   // What Do you want to do// 
   // View Department, Employee, Roles// 
@@ -220,4 +249,3 @@ function removeDept() {
   // Update Employee (delete employee, or update roles)/
   // Make sure schema.sql is working properly// 
   // Make sure seed.sql works properly// 
-  

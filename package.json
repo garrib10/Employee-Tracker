@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/garrib10/Employee-Tracker#readme",
   "dependencies": {
+    "console-table-printer": "^2.4.32",
     "console.table": "^0.10.0",
+    "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
     "js": "^0.1.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "util": "^0.12.3"
   }
 }
