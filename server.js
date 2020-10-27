@@ -20,8 +20,50 @@ connection.connect(function (err) {
 
 function start() {
   inquirer
-    .prompt
+    .prompt({
+      type: 'list',
+      name: 'start',
+      message: "What would you like to do?",
+      choices: ["View all employees", "View employees by Departments", "View employees by roles",
+        "Add Employee Information", "Update Employee Information", "Delete Employee Information",
+        "View All Roles", "Add Role", "Update Role", "Delete Role",
+        "View Departments", "Add Departments", "Update Departments", "Remove Departments", "Exit",]
+    })
+    .then(function (answer) {
+      switch (answer.start) {
+        case "View all employees":
+          return viewEmployee();
+        case " View Employees by Department":
+          return viewbyDepartment();
+        case "Add Employee Information":
+          return addEmployee();
+        case "Update Employee Information":
+          return updateEmployee();
+        case "Delete Employee Information":
+          return deleteEmployee();
+        case "View All Roles":
+          return viewRole();
+        case "Add Role":
+          return addRole();
+        case "Update Role":
+          return updateRole();
+        case "Remove Role":
+          return removeRole();
+        case "View Departments":
+          return viewDepts();
+        case "Add Departments":
+          return addDept();
+        case "Update Departments":
+          return updateDept();
+        case "Remove Departments":
+          return removeDept();
+        case "Exit":
+          connection.end();
+      }
+    });
+  
 }
+
 
 
 
@@ -30,7 +72,11 @@ function viewEmployee() {
 
 }
 
-function AddEmployee() {
+function viewbyDepartment() {
+
+}
+
+function addEmployee() {
   inquirer
     .prompt([
       {
@@ -41,17 +87,17 @@ function AddEmployee() {
       {
         type: 'input',
         name: "last_name",
-        message: "What is the employee's last name?",
+        message: "What is the employee's last name?"
       },
       {
         type: "input",
         name: "role_id",
-        message: "What is the employee's role ID?",
+        message: "What is the employee's role ID?"
       },
       {
         type: "number",
         name: "manager_id",
-        message: "What is the employee's manager ID?",
+        message: "What is the employee's manager ID?"
       }
     ])
     .then(function (res) {
@@ -71,19 +117,21 @@ function AddEmployee() {
     });
 }
 
+function updateEmployee() {
+
+}
+
 function deleteEmployee() {
 
 }
 
-function viewDepartment() {
+
+
+function addDepts() {
 
 }
 
-function addDepartment() {
-
-}
-
-function removeDepartment() {
+function removeDepts() {
 
 }
 
