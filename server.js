@@ -55,7 +55,7 @@ var connection = mysql.createConnection({
   }
 
 
-
+  // TO DO LIST// 
   // Use Inquirer to make a prompt//
   // What Do you want to do// 
   // View Department, Employee, Roles// 
