@@ -28,8 +28,7 @@ function start() {
       type: 'list',
       name: 'start',
       message: "What would you like to do?",
-      choices: ["View all employees", "View employees by Departments", "View employees by roles",
-        "Add Employee Information", "Update Employee Information", "Delete Employee Information",
+      choices: ["View all employees","Add Employee Information", "Update Employee Information", "Delete Employee Information",
         "View All Roles", "Add Role", "Update Role", "Delete Role",
         "View Departments", "Add Departments", "Update Departments", "Remove Departments", "Exit",]
     })
@@ -37,8 +36,6 @@ function start() {
       switch (answer.start) {
         case "View all employees":
           return viewEmployee();
-        case " View Employees by Department":
-          return viewbyDept();
         case "Add Employee Information":
           return addEmployee();
         case "Update Employee Information":
@@ -77,10 +74,6 @@ function viewEmployee() {
     printTable(res);
     start();
   })
-}
-
-function viewbyDept() {
-
 }
 
 async function addEmployee() {
@@ -133,7 +126,7 @@ async function addEmployee() {
 }
 
 function updateEmployee() {
-
+  
 }
 
 function deleteEmployee() {
@@ -192,7 +185,6 @@ async function addRole() {
 }
 
 function updateRole() {
-
 }
 
 function removeRole() {
@@ -207,7 +199,8 @@ function viewDepts() {
   
 }
 
-function addDept() {
+async function addDept() {
+
   inquirer
     .prompt([
       {
@@ -242,10 +235,10 @@ function removeDept() {
 
 
  
-  // Use Inquirer to make a prompt//
-  // What Do you want to do// 
-  // View Department, Employee, Roles// 
-  // Add Department, Employee, Roles// Done 
-  // Update Employee (delete employee, or update roles)/
-  // Make sure schema.sql is working properly// 
-  // Make sure seed.sql works properly// 
+  // Use Inquirer to make a prompt// Done 
+  // View Department, Employee, Roles// Done 
+  // Add Department, Employee, Roles// Problem with Asynch function
+  // Update Employee , Roles, Departments// 
+  // Remove Department, Employee, Roles// 
+  // Make sure schema.sql is working properly// Done 
+  // Make sure seed.sql works properly// Updating, might add viewbyDepartment again// 
