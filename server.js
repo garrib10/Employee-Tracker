@@ -28,7 +28,7 @@ function start() {
       type: 'list',
       name: 'start',
       message: "What would you like to do?",
-      choices: ["View all employees","Add Employee Information", "Update Employee Information", "Delete Employee Information",
+      choices: ["View all employees", "Add Employee Information", "Update Employee Information", "Delete Employee Information",
         "View All Roles", "Add Role", "Update Role", "Delete Role",
         "View Departments", "Add Departments", "Update Departments", "Remove Departments", "Exit",]
     })
@@ -113,7 +113,9 @@ async function addEmployee() {
         "INSERT INTO employee SET?",
         {
           first_name: res.first_name,
-          last_name: res.last_name
+          last_name: res.last_name,
+          role_id: res.role_id,
+          manager_id: res.manager_id,
         },
         function (err) {
           if (err) throw err;
@@ -126,9 +128,54 @@ async function addEmployee() {
 }
 
 function updateEmployee() {
-  
-}
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
 
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "first_name",
+          message: "What is the employee's first name?"
+        },
+        {
+          type: 'input',
+          name: "last_name",
+          message: "What is the employee's last name?"
+        },
+        {
+          type: "list",
+          name: "role_id",
+          message: "What is the employee's role?",
+         
+
+        },
+        {
+          type: "number",
+          name: "manager_id",
+          message: "What is the employee's manager ID?"
+        }
+     ])
+      .then (res) ; {
+        // UPDATE SYNTEX getting an error , need fix this// 
+        connection.query("UPDATE employee SET  WHERE ",  
+        {
+          first_name: res.first_name,
+          last_name: res.last_name,
+          role_id: res.role_id,
+          manager_id: res.manager_id,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Employee has been succesfully updated.");
+          start();
+        }
+        )
+      }
+      
+  
+})
+}
 function deleteEmployee() {
 
 }
@@ -142,13 +189,13 @@ function viewRole() {
 
 async function addRole() {
 
-  const departments = await viewDept();
+  const departments = await viewDepts ();
+  const deptChoices = departments.map(({ id, department_name }) => ({
 
-  const deptChoices = departments.map(({ id, department_name}) => ({
     name: department_name,
-    value: id
+    value: id,
   }))
-  //prompts for new employee info
+  
   inquirer
     .prompt([
       {
@@ -165,7 +212,8 @@ async function addRole() {
       {
         type: "list",
         name: "department_id",
-        message: "What is the Department??"
+        message: "What is the Department??",
+        choices: deptChoices
       }
     ])
     .then(function (res) {
@@ -191,38 +239,35 @@ function removeRole() {
 
 }
 function viewDepts() {
- connection.query("SELECT * FROM department").then(res => {
-   printTable(res);
-   start();
- })
+  connection.query("SELECT * FROM department").then(res => {
+    printTable(res);
+    start();
+  })
 
-  
+
 }
-
+// Works// 
 async function addDept() {
+ 
+  query = `SELECT department_name AS "Department" FROM department`;
+  connection.query(query, (err, results) => {
+      if (err) throw err;
 
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "department",
-        message: "What kind of department would you like to add?"
-      }
-    ])
-    .then(function (res) {
-      connection.query("INSERT INTO department (name)",
-        {
-          department: res.department,
-        },
-        function (err) {
-          if (err) throw err;
-          console.log("Department has been succesfully added.");
+      console.log('');
+      console.table(('List of current Departments'), results);
+
+      inquirer.prompt([
+          {
+              name: 'newDept',
+              type: 'input',
+              message: 'Enter the name of the Department to add:'
+          }
+      ]).then((answer) => {
+          connection.query(`INSERT INTO department(department_name) VALUES( ? )`, answer.newDept)
           start();
-        }
-      );
-    });
+      })
+  })
 }
-
 function updateDept() {
 
 }
@@ -234,11 +279,11 @@ function removeDept() {
 
 
 
- 
+
   // Use Inquirer to make a prompt// Done 
   // View Department, Employee, Roles// Done 
-  // Add Department, Employee, Roles// Problem with Asynch function
-  // Update Employee , Roles, Departments// 
+  // Add Department, Employee, Roles// Problem with Asynch function and map 
+  // Update Employee , Roles, Departments// probmel with the update syntax// 
   // Remove Department, Employee, Roles// 
   // Make sure schema.sql is working properly// Done 
   // Make sure seed.sql works properly// Updating, might add viewbyDepartment again// 
