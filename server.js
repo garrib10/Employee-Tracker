@@ -46,7 +46,7 @@ function start() {
           return viewRole();
         case "Add Role":
           return addRole();
-        case "Update Role":
+        case "Update Employee's Role":
           return updateRole();
         case "Remove Role":
           return removeRole();
@@ -54,8 +54,6 @@ function start() {
           return viewDepts();
         case "Add Departments":
           return addDept();
-        case "Update Departments":
-          return updateDept();
         case "Remove Departments":
           return removeDept();
         case "Exit":
@@ -68,63 +66,56 @@ function start() {
 
 
 
-
+//Works//
 function viewEmployee() {
   connection.query("SELECT * FROM employee").then(res => {
     printTable(res);
     start();
   })
 }
+// Need to research on Maps "Cannot read propery of map of undefined"//
+async function addEmployee()  {
+  connection.query((query, err, results) => {
+    if (err) throw err;
 
-async function addEmployee() {
-  const roles = await viewRole();
-
-  const roleChoices = roles.map(({ id, title }) => ({
-    name: title,
-    value: id
-  }))
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "first_name",
-        message: "What is the employee's first name?"
-      },
-      {
-        type: 'input',
-        name: "last_name",
-        message: "What is the employee's last name?"
-      },
-      {
-        type: "list",
-        name: "role_id",
-        message: "What is the employee's role?",
-        choices: roleChoices
-
-      },
-      {
-        type: "number",
-        name: "manager_id",
-        message: "What is the employee's manager ID?"
-      }
-    ])
-    .then(function (res) {
-      connection.query(
-        "INSERT INTO employee SET?",
+    inquirer.prompt([
         {
-          first_name: res.first_name,
-          last_name: res.last_name,
-          role_id: res.role_id,
-          manager_id: res.manager_id,
-        },
-        function (err) {
-          if (err) throw err;
-          console.log("Employee has been succesfully added.");
-          start();
-        }
-      );
+            name: "first_name",
+            type: "input",
+            message: "What is the employee's first name?"
 
-    });
+        },
+        {
+            name: "last_name",
+            type: "input",
+            message: "What is the employee's last name?"
+        },
+        {
+            name: 'role',
+            type: 'input',
+            message: "What is the employees department role?"
+                
+        },
+        {
+            name: 'manager',
+            type: 'list',
+           message: "What is the Manager ID",
+           choices: function () {
+            let choiceArray = results.map(choice => choice.full_name);
+            return choiceArray;
+        },
+        }
+    ]).then((answer) => {
+        connection.query(
+            `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
+            (SELECT id FROM roles WHERE title = ? ), 
+            (SELECT id FROM (SELECT id FROM employees WHERE CONCAT(first_name," ",last_name) = ? ) AS tmptable))`, [answer.first_name, answer.last_name, answer.role, answer.manager]
+        )
+        start();
+    })
+})
+
+
 }
 
 function updateEmployee() {
@@ -179,7 +170,7 @@ function updateEmployee() {
 function deleteEmployee() {
 
 }
-
+//Works//
 function viewRole() {
   connection.query("SELECT * FROM role").then(res => {
     printTable(res);
@@ -238,6 +229,7 @@ function updateRole() {
 function removeRole() {
 
 }
+//Works//
 function viewDepts() {
   connection.query("SELECT * FROM department").then(res => {
     printTable(res);
@@ -268,13 +260,32 @@ async function addDept() {
       })
   })
 }
-function updateDept() {
-
-}
-
+//Works//
 function removeDept() {
+  query = "SELECT * FROM department";
+  connection.query(query, (err, results) => {
+      if (err) throw err;
+
+      inquirer.prompt([
+          {
+              name: "dept",
+              type: "list",
+              choices: function () {
+                  let choiceArray = results.map(choice => choice.department_name);
+                  return choiceArray;
+              },
+              message: "Select the department to remove:"
+          }
+      ]).then((answer) => {
+          connection.query(`DELETE FROM department
+           WHERE ? `, { department_name: answer.dept })
+          start();
+      })
+  })
 
 }
+
+
 
 
 
@@ -282,8 +293,8 @@ function removeDept() {
 
   // Use Inquirer to make a prompt// Done 
   // View Department, Employee, Roles// Done 
-  // Add Department, Employee, Roles// Problem with Asynch function and map 
-  // Update Employee , Roles, Departments// probmel with the update syntax// 
-  // Remove Department, Employee, Roles// 
+  // Add Department (Works), Employee, Roles// Problem with Asynch function and map 
+  // Update Employee  Roles, Departments// problem with the update syntax// 
+  // Remove Department (Works), Employee, Roles// 
   // Make sure schema.sql is working properly// Done 
   // Make sure seed.sql works properly// Updating, might add viewbyDepartment again// 
