@@ -28,9 +28,9 @@ function start() {
       type: 'list',
       name: 'start',
       message: "What would you like to do?",
-      choices: ["View all employees", "Add Employee Information", "Update Employee Information", "Delete Employee Information",
-        "View All Roles", "Add Role", "Update Role", "Delete Role",
-        "View Departments", "Add Departments", "Update Departments", "Remove Departments", "Exit",]
+      choices: ["View all Employees", "Add Employee Information", "Update Employee Information", "Delete Employee Information",
+        "View All Roles", "Add Role", "Update Employee's Role", "Delete Role",
+        "View Departments", "Add Departments","Remove Departments", "Exit",]
     })
     .then(function (answer) {
       switch (answer.start) {
