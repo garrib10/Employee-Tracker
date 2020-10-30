@@ -66,7 +66,7 @@ function start() {
 
 
 
-//Works//
+//Stop working//
 function viewEmployee() {
   connection.query("SELECT * FROM employee").then(res => {
     printTable(res);
@@ -99,15 +99,15 @@ async function addEmployee()  {
         {
             name: 'manager',
             type: 'list',
-           message: "What is the Manager ID",
+           message: "What is the Manager ID?",
            choices: function () {
-            let choiceArray = results.map(choice => choice.full_name);
+            let choiceArray = results(choice => choice.full_name);
             return choiceArray;
         },
         }
     ]).then((answer) => {
         connection.query(
-            `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
+            `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
             (SELECT id FROM roles WHERE title = ? ), 
             (SELECT id FROM (SELECT id FROM employees WHERE CONCAT(first_name," ",last_name) = ? ) AS tmptable))`, [answer.first_name, answer.last_name, answer.role, answer.manager]
         )
@@ -118,58 +118,25 @@ async function addEmployee()  {
 
 }
 
-function updateEmployee() {
-  connection.query("SELECT * FROM employee", function (err, res) {
+//Works//
+function deleteEmployee() {
+  connection.query("SELECT * FROM employee",(err, results) => {
     if (err) throw err;
-
-    inquirer
-      .prompt([
+    console.log(' ');
+    console.table(('All Employees'), results)
+    inquirer.prompt([
         {
-          type: "input",
-          name: "first_name",
-          message: "What is the employee's first name?"
-        },
-        {
-          type: 'input',
-          name: "last_name",
-          message: "What is the employee's last name?"
-        },
-        {
-          type: "list",
-          name: "role_id",
-          message: "What is the employee's role?",
-         
-
-        },
-        {
-          type: "number",
-          name: "manager_id",
-          message: "What is the employee's manager ID?"
+            name: 'IDtoRemove',
+            type: 'input',
+            message: 'Enter the Employee ID of the person to remove:'
         }
-     ])
-      .then (res) ; {
-        // UPDATE SYNTEX getting an error , need fix this// 
-        connection.query("UPDATE employee SET  WHERE ",  
-        {
-          first_name: res.first_name,
-          last_name: res.last_name,
-          role_id: res.role_id,
-          manager_id: res.manager_id,
-        },
-        function (err) {
-          if (err) throw err;
-          console.log("Employee has been succesfully updated.");
-          start();
-        }
-        )
-      }
-      
-  
+    ]).then((answer) => {
+        connection.query(`DELETE FROM employee where ?`, { id: answer.IDtoRemove })
+        start();
+    })
 })
 }
-function deleteEmployee() {
 
-}
 //Works//
 function viewRole() {
   connection.query("SELECT * FROM role").then(res => {
@@ -292,9 +259,9 @@ function removeDept() {
 
 
   // Use Inquirer to make a prompt// Done 
-  // View Department, Employee, Roles// Done 
+  // View Department, Employee , Roles// Need to fix  View Employee not working for some reason// 
   // Add Department (Works), Employee, Roles// Problem with Asynch function and map 
   // Update Employee  Roles, Departments// problem with the update syntax// 
-  // Remove Department (Works), Employee, Roles// 
+  // Remove Department (Works), Employee (Works), Roles// 
   // Make sure schema.sql is working properly// Done 
   // Make sure seed.sql works properly// Updating, might add viewbyDepartment again// 
