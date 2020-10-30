@@ -30,7 +30,7 @@ function start() {
       message: "What would you like to do?",
       choices: ["View all Employees", "Add Employee Information", "Update Employee Information", "Delete Employee Information",
         "View All Roles", "Add Role", "Update Employee's Role", "Delete Role",
-        "View Departments", "Add Departments","Remove Departments", "Exit",]
+        "View Departments", "Add Departments", "Remove Departments", "Exit",]
     })
     .then(function (answer) {
       switch (answer.start) {
@@ -74,67 +74,67 @@ function viewEmployee() {
   })
 }
 // Need to research on Maps "Cannot read propery of map of undefined"//
-async function addEmployee()  {
+async function addEmployee() {
   connection.query((query, err, results) => {
     if (err) throw err;
 
     inquirer.prompt([
-        {
-            name: "first_name",
-            type: "input",
-            message: "What is the employee's first name?"
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the employee's first name?"
 
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the employee's last name?"
+      },
+      {
+        name: 'role',
+        type: 'input',
+        message: "What is the employees department role?"
+
+      },
+      {
+        name: 'manager',
+        type: 'list',
+        message: "What is the Manager ID?",
+        choices: function () {
+          let choiceArray = results(choice => choice.full_name);
+          return choiceArray;
         },
-        {
-            name: "last_name",
-            type: "input",
-            message: "What is the employee's last name?"
-        },
-        {
-            name: 'role',
-            type: 'input',
-            message: "What is the employees department role?"
-                
-        },
-        {
-            name: 'manager',
-            type: 'list',
-           message: "What is the Manager ID?",
-           choices: function () {
-            let choiceArray = results(choice => choice.full_name);
-            return choiceArray;
-        },
-        }
+      }
     ]).then((answer) => {
-        connection.query(
-            `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
+      connection.query(
+        `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
             (SELECT id FROM roles WHERE title = ? ), 
             (SELECT id FROM (SELECT id FROM employees WHERE CONCAT(first_name," ",last_name) = ? ) AS tmptable))`, [answer.first_name, answer.last_name, answer.role, answer.manager]
-        )
-        start();
+      )
+      start();
     })
-})
+  })
 
 
 }
 
 //Works//
 function deleteEmployee() {
-  connection.query("SELECT * FROM employee",(err, results) => {
+  connection.query("SELECT * FROM employee", (err, results) => {
     if (err) throw err;
     console.log(' ');
     console.table(('All Employees'), results)
     inquirer.prompt([
-        {
-            name: 'IDtoRemove',
-            type: 'input',
-            message: 'Enter the Employee ID of the person to remove:'
-        }
+      {
+        name: 'IDtoRemove',
+        type: 'input',
+        message: 'Enter the Employee ID of the person to remove:'
+      }
     ]).then((answer) => {
-        connection.query(`DELETE FROM employee where ?`, { id: answer.IDtoRemove })
-        start();
+      connection.query(`DELETE FROM employee where ?`, { id: answer.IDtoRemove })
+      start();
     })
-})
+  })
 }
 
 //Works//
@@ -147,13 +147,13 @@ function viewRole() {
 
 async function addRole() {
 
-  const departments = await viewDepts ();
+  const departments = await viewDepts();
   const deptChoices = departments.map(({ id, department_name }) => ({
 
     name: department_name,
     value: id,
   }))
-  
+
   inquirer
     .prompt([
       {
@@ -194,6 +194,20 @@ function updateRole() {
 }
 
 function removeRole() {
+  query = "SELECT * FROM department";
+  connection.query(query, (err, results) => {
+    if (err) throw err;
+    inquirer.prompt([
+      {
+       name: "role",
+       type: "list",
+       choices: function (){
+
+       
+      }
+       }
+    ])
+  })
 
 }
 //Works//
@@ -207,47 +221,47 @@ function viewDepts() {
 }
 // Works// 
 async function addDept() {
- 
+
   query = `SELECT department_name AS "Department" FROM department`;
   connection.query(query, (err, results) => {
-      if (err) throw err;
+    if (err) throw err;
 
-      console.log('');
-      console.table(('List of current Departments'), results);
+    console.log('');
+    console.table(('List of current Departments'), results);
 
-      inquirer.prompt([
-          {
-              name: 'newDept',
-              type: 'input',
-              message: 'Enter the name of the Department to add:'
-          }
-      ]).then((answer) => {
-          connection.query(`INSERT INTO department(department_name) VALUES( ? )`, answer.newDept)
-          start();
-      })
+    inquirer.prompt([
+      {
+        name: 'newDept',
+        type: 'input',
+        message: 'Enter the name of the Department to add:'
+      }
+    ]).then((answer) => {
+      connection.query(`INSERT INTO department(department_name) VALUES( ? )`, answer.newDept)
+      start();
+    })
   })
 }
 //Works//
 function removeDept() {
   query = "SELECT * FROM department";
   connection.query(query, (err, results) => {
-      if (err) throw err;
+    if (err) throw err;
 
-      inquirer.prompt([
-          {
-              name: "dept",
-              type: "list",
-              choices: function () {
-                  let choiceArray = results.map(choice => choice.department_name);
-                  return choiceArray;
-              },
-              message: "Select the department to remove:"
-          }
-      ]).then((answer) => {
-          connection.query(`DELETE FROM department
+    inquirer.prompt([
+      {
+        name: "dept",
+        type: "list",
+        choices: function () {
+          let choiceArray = results.map(choice => choice.department_name);
+          return choiceArray;
+        },
+        message: "Select the department to remove:"
+      }
+    ]).then((answer) => {
+      connection.query(`DELETE FROM department
            WHERE ? `, { department_name: answer.dept })
-          start();
-      })
+      start();
+    })
   })
 
 }
