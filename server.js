@@ -34,19 +34,19 @@ function start() {
     })
     .then(function (answer) {
       switch (answer.start) {
-        case "View all employees":
-          return viewEmployee();
+        case "View Employees":
+          return viewEmployees();
         case "Add Employee Information":
           return addEmployee();
         case "Update Employee Information":
           return updateEmployee();
         case "Delete Employee Information":
           return deleteEmployee();
-        case "View All Roles":
+        case "View Roles":
           return viewRole();
         case "Add Role":
           return addRole();
-        case "Update Employee's Role":
+        case "Update Role":
           return updateRole();
         case "Remove Role":
           return removeRole();
@@ -67,7 +67,7 @@ function start() {
 
 
 //Stop working//
-function viewEmployee() {
+function viewEmployees() {
   connection.query("SELECT * FROM employee").then(res => {
     printTable(res);
     start();
@@ -116,7 +116,7 @@ async function addEmployee() {
 
 }
 
-
+//Works//
 function deleteEmployee() {
   connection.query("SELECT * FROM employee", (err, results) => {
     if (err) throw err;
@@ -135,7 +135,7 @@ function deleteEmployee() {
   })
 }
 
-//Works//
+//Stop Works//
 function viewRole() {
   connection.query("SELECT * FROM role").then(res => {
     printTable(res);
@@ -144,69 +144,53 @@ function viewRole() {
 }
 
 async function addRole() {
-
-  
-
   inquirer
     .prompt([
       {
         type: "input",
-        name: "title",
-        message: "What is the title of this role?"
-
+        message: "enter employee title",
+        name: "addtitle"
       },
       {
-        type: "number",
-        name: "salary",
-        message: "What is the salary of this role?"
+        type: "input",
+        message: "enter employee salary",
+        name: "addsalary"
       },
       {
-        type: "list",
-        name: "department_id",
-        message: "What is the Department??",
-        choices: deptChoices
+        type: "input",
+        message: "enter employee department id",
+        name: "addDepId"
       }
     ])
-    .then(function (res) {
-      connection.query("INSERT INTO role (title,salary,department_id)",
+    .then(function(answer) {
+      connection.query(
+        "INSERT INTO role SET ?",
         {
-          title: res.title,
-          salary: res.salary,
-          department_id: res.department_id,
+          title: answer.addtitle,
+          salary: answer.addsalary,
+          department_id: answer.addDepId
         },
-        function (err) {
-          if (err) throw err;
-          console.log("Department has been succesfully added.");
-          start();
+        function(err, answer) {
+          if (err) {
+            throw err;
+          }
+          console.table(answer);
         }
       );
+      start();
     });
 }
+  
+
+ 
+        
+
 
 function updateRole() {
 }
-// Finish Working// 
+
 function removeRole() {
-  query = "SELECT * FROM role";
-  connection.query(query, (err, results) => {
-    if (err) throw err;
-    inquirer.prompt([
-      {
-       name: "role",
-       type: "list",
-       choices: function (){
-       let choiceArray =results.map(choice => choice.role);
-       return choiceArray;
-       
-      },
-      message: "Select the role to remove:"
-       }
-      ]).then((answer) => {
-        connection.query(`DELETE FROM role
-             WHERE ? `, { title: answer.tile })
-        start();
-      })
-    })
+  
 }
 //Works// 
 function viewDepts() {
@@ -271,9 +255,9 @@ function removeDept() {
 
 
   // Use Inquirer to make a prompt// Done 
-  // View Department(Works), Employee (Not working) , Roles(Works) // Need to fix  View Employee not working for some reason// 
-  // Add Department (Works), Employee(Works) Roles// Problem with Asynch function and map 
-  // Update Employee  Roles, Departments// problem with the update syntax// 
+  // View Department(Works), Employee (Not working) , Roles(Not Working) // Need to fix  View Employee not working for some reason// 
+  // Add Department (Works), Employee(Works) Roles(Works) // Problem with Asynch function and map 
+  // Update Employee  Roles, 
   // Remove Department (Works), Employee (Works), Roles// 
   // Make sure schema.sql is working properly// Done 
   // Make sure seed.sql works properly// Updating, might add viewbyDepartment again// 
