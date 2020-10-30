@@ -73,52 +73,50 @@ function viewEmployee() {
     start();
   })
 }
-// Need to research on Maps "Cannot read propery of map of undefined"//
+//Works// 
 async function addEmployee() {
-  connection.query((query, err, results) => {
-    if (err) throw err;
-
-    inquirer.prompt([
+  inquirer
+    .prompt([
       {
-        name: "first_name",
         type: "input",
-        message: "What is the employee's first name?"
-
+        message: "Enter employee first name",
+        name: "firstname"
       },
       {
-        name: "last_name",
         type: "input",
-        message: "What is the employee's last name?"
+        message: "Enter employee last name",
+        name: "lastname"
       },
       {
-        name: 'role',
-        type: 'input',
-        message: "What is the employees department role?"
-
+        type:"input",
+        message: "What is the employee role ID",
+        name:"role"
       },
-      {
-        name: 'manager',
-        type: 'list',
-        message: "What is the Manager ID?",
-        choices: function () {
-          let choiceArray = results(choice => choice.full_name);
-          return choiceArray;
-        },
-      }
-    ]).then((answer) => {
+       
+    ])
+    .then(function(answer) {
       connection.query(
-        `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES(?, ?, 
-            (SELECT id FROM roles WHERE title = ? ), 
-            (SELECT id FROM (SELECT id FROM employees WHERE CONCAT(first_name," ",last_name) = ? ) AS tmptable))`, [answer.first_name, answer.last_name, answer.role, answer.manager]
-      )
+        "INSERT INTO employee SET ?",
+        {
+          first_name: answer.firstname,
+          last_name: answer.lastname,
+          role_id: answer.role,
+          manager_id: null
+        },
+        function(err, answer) {
+          if (err) {
+            throw err;
+          }
+          console.table(answer);
+        }
+      );
       start();
-    })
-  })
+    });
 
 
 }
 
-//Works//
+
 function deleteEmployee() {
   connection.query("SELECT * FROM employee", (err, results) => {
     if (err) throw err;
@@ -147,12 +145,7 @@ function viewRole() {
 
 async function addRole() {
 
-  const departments = await viewDepts();
-  const deptChoices = departments.map(({ id, department_name }) => ({
-
-    name: department_name,
-    value: id,
-  }))
+  
 
   inquirer
     .prompt([
@@ -192,9 +185,9 @@ async function addRole() {
 
 function updateRole() {
 }
-
+// Finish Working// 
 function removeRole() {
-  query = "SELECT * FROM department";
+  query = "SELECT * FROM role";
   connection.query(query, (err, results) => {
     if (err) throw err;
     inquirer.prompt([
@@ -202,15 +195,20 @@ function removeRole() {
        name: "role",
        type: "list",
        choices: function (){
-
+       let choiceArray =results.map(choice => choice.role);
+       return choiceArray;
        
-      }
+      },
+      message: "Select the role to remove:"
        }
-    ])
-  })
-
+      ]).then((answer) => {
+        connection.query(`DELETE FROM role
+             WHERE ? `, { title: answer.tile })
+        start();
+      })
+    })
 }
-//Works//
+//Works// 
 function viewDepts() {
   connection.query("SELECT * FROM department").then(res => {
     printTable(res);
@@ -219,7 +217,7 @@ function viewDepts() {
 
 
 }
-// Works// 
+//Works//
 async function addDept() {
 
   query = `SELECT department_name AS "Department" FROM department`;
@@ -273,8 +271,8 @@ function removeDept() {
 
 
   // Use Inquirer to make a prompt// Done 
-  // View Department, Employee , Roles// Need to fix  View Employee not working for some reason// 
-  // Add Department (Works), Employee, Roles// Problem with Asynch function and map 
+  // View Department(Works), Employee (Not working) , Roles(Works) // Need to fix  View Employee not working for some reason// 
+  // Add Department (Works), Employee(Works) Roles// Problem with Asynch function and map 
   // Update Employee  Roles, Departments// problem with the update syntax// 
   // Remove Department (Works), Employee (Works), Roles// 
   // Make sure schema.sql is working properly// Done 
