@@ -16,9 +16,14 @@ class DB {
   }
   createDepartment(name) {
     return this.connection.query("INSERT INTO department SET ?", {
-      name: name
+      department_name: name
     })
   }
+  deleteDepartment(name){
+     return this.connection.query("DELETE FROM department WHERE ?",{
+    department_name:name
+  })
+}
   createRole(title, salary, department_id) {
     return this.connection.query("INSERT INTO role SET ?", {
       title: title,

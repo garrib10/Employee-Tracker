@@ -270,6 +270,31 @@ async function addEmployee() {
       });
     });
 };
+async function removeDept () {
+  const departments = await DB.findAllDepartments();
+  const departmentArray = departments.map(({ id, name }) => ({
+    name: name,
+    value: id
+  }));
+  inquirer.prompt([
+    {
+      name: "dept",
+      type: "list",
+      choices: function () {
+        let departmentArray = departments.map(choice => choice.department_name);
+        return departmentArray;
+      },
+      message: "Select the department to remove:"
+    }
+  ])
+    .then(function (answer) {
+      DB.deleteDepartment(answer.dept).then((response) => {
+        console.log(response);
+        viewDepts();
+      });
+    });
+};
+ 
 function exit() {
   process.exit()
 }
