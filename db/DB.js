@@ -31,6 +31,12 @@ class DB {
             department_id: department_id
         })
     }
+    deleteRole(title,departmentID){
+      return this.connection.query("DELETE FROM role WHERE ?", {
+         title: title,
+         department_id: departmentID
+      })
+    }
     createEmployee(firstName, lastName, role_id) {
         return this.connection.query("INSERT INTO employee SET ?", {
             first_name: firstName,

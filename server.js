@@ -86,6 +86,12 @@ function Role_Prompts() {
         case 'Add a New Position':
           addRole();
           break;
+        case 'Update a Position':
+          updateRole();
+          break;
+        case 'Remove a Position':
+          removeRole();
+          break;
         default:
           exit();
       }
@@ -100,7 +106,7 @@ function Department_Prompts() {
         message: 'What would you like to do?',
         choices: [
           'View All Departments',
-          'Add a New Department',
+          'Add a Department',
           'Remove a Department',
           'Exit',
         ],
@@ -276,7 +282,7 @@ async function addEmployee() {
     });
 };
 //Works//
-async function removeDept () {
+async function removeDept() {
   const departments = await DB.findAllDepartments();
   const departmentArray = departments.map(({ id, name }) => ({
     name: name,
@@ -301,7 +307,7 @@ async function removeDept () {
     });
 };
 //Works//
-async function removeEmployee (){
+async function removeEmployee() {
   const roles = await DB.findAllRoles();
   const roleChoices = roles.map(({ id, title }) => ({
     name: title,
@@ -310,29 +316,60 @@ async function removeEmployee (){
   inquirer
     .prompt([
       {
-   
-      
+
+
         type: 'input',
         name: 'roleID',
         message: "what is this employee's role id ?",
-        
+
       }
     ])
     .then(function (answers) {
       DB.deleteEmployee(
-         answers.roleID ).then(function (response) {
-        console.log(response)
-        viewEmployees();
-      });
+        answers.roleID).then(function (response) {
+          console.log(response)
+          viewEmployees();
+        });
     });
 };
-    
+async function removeRole() {
+  const departments = await DB.findAllDepartments();
 
- 
-function exit() {
-  process.exit()
-}
-start();
+  const departmentChoices = departments.map(({ id, name }) => ({
+    name: name,
+    value: id
+  }));
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'title',
+        message: 'what is the title for this role?',
+      },
+      {
+        type: 'list',
+        name: 'departmentID',
+        message: 'Which department is assigned this position',
+        choices: departmentChoices
+      },
+    ])
+    .then(function (answers) {
+      DB.deleteRole(
+        answers.title, answers.departmentID).then(function (response) {
+          console.log(response)
+          viewRoles();
+        });
+    });
+};
+      async function updateRole() {
+
+      };
+
+
+  function exit() {
+    process.exit()
+  }
+  start();
 
 
 
