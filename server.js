@@ -1,7 +1,8 @@
 
 var inquirer = require("inquirer");
 var DB = require("./db/DB")
-var { printTable } = require("console-table-printer")
+var { printTable } = require("console-table-printer");
+const { findAllEmployees } = require("./db/DB");
 require("dotenv").config()
 
 function start() {
@@ -117,10 +118,11 @@ function Department_Prompts() {
           removeDept();
           break;
         default:
-          goodBye();
+          exit();
       }
     });
 }
+//Works//
 function viewEmployees() {
   console.log('Here is your full roster of employees');
   DB.findAllEmployees().then(function (response) {
@@ -128,6 +130,7 @@ function viewEmployees() {
     start();
   });
 }
+//Works//
 const viewDepts = () => {
   console.log('Here are the active departments:');
   DB.findAllDepartments().then(function (res) {
@@ -135,6 +138,7 @@ const viewDepts = () => {
     start();
   });
 };
+//Works//
 const viewRoles = () => {
   console.log('Here are the current roles for your organization');
   DB.findAllRoles().then((data) => {
@@ -142,7 +146,7 @@ const viewRoles = () => {
     start();
   });
 };
-
+//Works//
 async function List_Employees_By_Department() {
   const departments = await DB.findAllDepartments();
   const departmentArray = departments.map(({ id, name }) => ({
@@ -161,6 +165,7 @@ async function List_Employees_By_Department() {
     })
   })
 }
+//Works//
 const addDept = () => {
   inquirer
     .prompt([
@@ -177,6 +182,7 @@ const addDept = () => {
       });
     });
 };
+//Works//
 async function addRole() {
   const departments = await DB.findAllDepartments();
 
@@ -219,10 +225,9 @@ async function addRole() {
       );
     });
 };
+//Works//
 async function addEmployee() {
-
   const roles = await DB.findAllRoles();
-  //makes the array of roles grow as we add new roles
   const roleChoices = roles.map(({ id, title }) => ({
     name: title,
     value: id
@@ -266,10 +271,11 @@ async function addEmployee() {
         answers.roleID
       ).then(function (response) {
         console.log(response);
-        View_All_Employees();
+        viewEmployees();
       });
     });
 };
+//Works//
 async function removeDept () {
   const departments = await DB.findAllDepartments();
   const departmentArray = departments.map(({ id, name }) => ({
@@ -294,6 +300,34 @@ async function removeDept () {
       });
     });
 };
+//Works//
+async function removeEmployee (){
+  const roles = await DB.findAllRoles();
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id
+  }));
+  inquirer
+    .prompt([
+      {
+   
+      
+        type: 'input',
+        name: 'roleID',
+        message: "what is this employee's role id ?",
+        
+      }
+    ])
+    .then(function (answers) {
+      DB.deleteEmployee(
+         answers.roleID ).then(function (response) {
+        console.log(response)
+        viewEmployees();
+      });
+    });
+};
+    
+
  
 function exit() {
   process.exit()
