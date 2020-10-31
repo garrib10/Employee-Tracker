@@ -41,7 +41,7 @@ function start() {
         case "Update Employee Information":
           return updateEmployee();
         case "Delete Employee Information":
-          return deleteEmployee();
+          return removeEmployee();
         case "View Roles":
           return viewRole();
         case "Add Role":
@@ -117,7 +117,7 @@ async function addEmployee() {
 }
 
 //Works//
-function deleteEmployee() {
+function removeEmployee() {
   connection.query("SELECT * FROM employee", (err, results) => {
     if (err) throw err;
     console.log(' ');
@@ -142,7 +142,7 @@ function viewRole() {
     start();
   })
 }
-
+//Works//
 async function addRole() {
   inquirer
     .prompt([
