@@ -31,10 +31,10 @@ class DB {
             department_id: department_id
         })
     }
-    deleteRole(title,departmentID){
+    deleteRole(title){
       return this.connection.query("DELETE FROM role WHERE ?", {
          title: title,
-         department_id: departmentID
+        
       })
     }
     createEmployee(firstName, lastName, role_id) {

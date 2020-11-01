@@ -73,7 +73,8 @@ function Role_Prompts() {
         message: 'What would you like to do?',
         choices: [
           'View All Positions',
-          'Add a New Position',
+          'Add a Position',
+          'Remove a Position',
           'Exit',
         ],
       },
@@ -332,6 +333,7 @@ async function removeEmployee() {
         });
     });
 };
+//Testing// 
 async function removeRole() {
   const departments = await DB.findAllDepartments();
 
@@ -344,18 +346,14 @@ async function removeRole() {
       {
         type: 'input',
         name: 'title',
-        message: 'what is the title for this role?',
+        message: 'what is the position you want to remove?',
       },
-      {
-        type: 'list',
-        name: 'departmentID',
-        message: 'Which department is assigned this position',
-        choices: departmentChoices
-      },
+      
     ])
+    //Works// 
     .then(function (answers) {
       DB.deleteRole(
-        answers.title, answers.departmentID).then(function (response) {
+        answers.title).then(function (response) {
           console.log(response)
           viewRoles();
         });
