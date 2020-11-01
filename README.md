@@ -106,7 +106,7 @@ You are required to submit the following:
 
 * URL: https://github.com/garrib10/Employee-Tracker
 
-* Video URL: 
+* Video URL: https://drive.google.com/file/d/1T9Z6kiAij5B_LtgA1oiGxZya19XPqScE/view 
 
 - - -
 © 2020 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
