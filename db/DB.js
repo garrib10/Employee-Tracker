@@ -14,9 +14,9 @@ class DB {
     findAllRoles() {
         return this.connection.query("SELECT * FROM role")
     }
-    createDepartment(name) {
+    createDepartment(departmentName) {
         return this.connection.query("INSERT INTO department SET ?", {
-            department_name: name
+            department_name: departmentName
         })
     }
     deleteDepartment(name) {
@@ -48,10 +48,6 @@ class DB {
         return this.connection.query("DELETE FROM employee WHERE ?", {
              role_id: roleID
         })
-    }
-
-    listEmployeesByDepartment() {
-        return this.connection.query("SELECT employee.first_name, employee.last_name, employee.role_id FROM employee")
     }
 
 }

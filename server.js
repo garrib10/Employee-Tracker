@@ -40,7 +40,6 @@ function Employee_Prompts() {
           'View All Employees',
           'Add Employee',
           'Remove Employee',
-          'List Employees by Department',
           'Exit',
         ],
       },
@@ -55,9 +54,6 @@ function Employee_Prompts() {
           break;
         case 'Remove Employee':
           removeEmployee();
-          break;
-        case 'List Employees by Department':
-          List_Employees_By_Department();
           break;
         default:
           exit();
@@ -86,9 +82,6 @@ function Role_Prompts() {
           break;
         case 'Add a New Position':
           addRole();
-          break;
-        case 'Update a Position':
-          updateRole();
           break;
         case 'Remove a Position':
           removeRole();
@@ -153,43 +146,25 @@ const viewRoles = () => {
     start();
   });
 };
-//Works//
-async function List_Employees_By_Department() {
-  const departments = await DB.findAllDepartments();
-  const departmentArray = departments.map(({ id, name }) => ({
-    name: name,
-    value: id
-  }));
-  inquirer.prompt([{
-    type: "list",
-    name: "departmentChoice",
-    message: "Which department would you like to see?",
-    choices: departmentArray
-  }]).then(function (response) {
-    console.log(response.departmentChoice)
-    DB.listEmployeesByDepartment().then(function (response) {
-      printTable(response)
-    })
-  })
-}
-//Works//
-const addDept = () => {
-  inquirer
-    .prompt([
-      {
-        type: 'input',
-        name: 'departmentName',
-        message: 'What is the name of the new department?',
-      },
-    ])
-    .then(function (answer) {
-      DB.createDepartment(answer.departmentName).then((response) => {
-        console.log(response);
-        viewDepts();
+
+//Stop Working?? // 
+function addDept() {
+    inquirer
+      .prompt([
+        {
+          type: 'input',
+          name: 'departmentName',
+          message: 'What is the name of the new department?',
+        },
+      ])
+      .then(function (answer) {
+        DB.createDepartment(answer.departmentName).then((response) => {
+          console.log(response);
+          viewDepts();
+        });
       });
-    });
-};
-//Works//
+  };
+//Stop working 
 async function addRole() {
   const departments = await DB.findAllDepartments();
 
@@ -333,7 +308,7 @@ async function removeEmployee() {
         });
     });
 };
-//Testing// 
+//Works//
 async function removeRole() {
   const departments = await DB.findAllDepartments();
 
@@ -348,9 +323,9 @@ async function removeRole() {
         name: 'title',
         message: 'what is the position you want to remove?',
       },
-      
+
     ])
-    //Works// 
+
     .then(function (answers) {
       DB.deleteRole(
         answers.title).then(function (response) {
@@ -359,15 +334,14 @@ async function removeRole() {
         });
     });
 };
-      async function updateRole() {
-
-      };
 
 
-  function exit() {
-    process.exit()
-  }
-  start();
+
+
+function exit() {
+  process.exit()
+}
+start();
 
 
 
