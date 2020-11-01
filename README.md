@@ -1,12 +1,12 @@
 # Unit 12 MySQL Homework: Employee Tracker
 
-Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
+For this assignment, we were told to make a employee tracker with node.js and mysql. We were told to make a schema.swl and seed.sql that we would put into our mysql workbench and create a database there. After that we were told to make departments,roles,and employees based off the criteria below. After that we were told to when the application is started we are suppose to view, add, and remove depending on the department, role, or employee that we choose. This assignment I found very challenging because I had several instiances where some of the code that worked before just stopped working completely which was frustrating to say the least. 
 
 ## Instructions
 
 Design the following database schema containing three tables:
 
-![Database Schema](Assets/schema.png)
+
 
 * **department**:
 
@@ -66,17 +66,6 @@ How do you deliver this? Here are some guidelines:
 
 * You will need to perform a variety of SQL JOINS to complete this assignment, and it's recommended you review the week's activities if you need a refresher on this.
 
-![Employee Tracker](Assets/employee-tracker.gif)
-
-### Hints
-
-* You may wish to include a `seed.sql` file to pre-populate your database. This will make development of individual features much easier.
-
-* Focus on getting the basic functionality completed before working on more advanced features.
-
-* Review the week's activities for a refresher on MySQL.
-
-* Check out [SQL Bolt](https://sqlbolt.com/) for some extra MySQL help.
 
 ## Minimum Requirements
 
@@ -115,9 +104,9 @@ How do you deliver this? Here are some guidelines:
 
 You are required to submit the following:
 
-* URL: 
+* URL: https://github.com/garrib10/Employee-Tracker
 
 * Video URL: 
 
 - - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+© 2020 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
